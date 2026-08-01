@@ -6,7 +6,7 @@ import { forgotPasswordAction } from "../../../store/forgotPasswordSlice";
 import ButtonStyled from "../../../components/ButtonStyled";
 import { FieldError } from "../../../components/FormField";
 import {
-  Page, AuthBox, Logo, Heading, SubText,
+  Page, AuthBox, Heading, SubText,
   ErrorAlert, LoadingWrap, LoadingImg, FooterDivider, FooterText,
   OtpRow, OtpBox,
 } from "./component.styles";
@@ -79,7 +79,6 @@ function ResetAuth() {
   return (
     <Page>
       <AuthBox>
-        <Logo src="/assets/images/logo-ori.png" alt="ProjeX" />
         <Heading>Reset Your Password</Heading>
         <SubText>Please enter the OTP sent to your email address.</SubText>
 
@@ -117,7 +116,7 @@ function ResetAuth() {
         )}
 
         <FooterDivider />
-        <FooterText>© {new Date().getFullYear()} ProjeX. All rights reserved.</FooterText>
+        <FooterText>© {new Date().getFullYear()} demo-dash. All rights reserved.</FooterText>
       </AuthBox>
     </Page>
   );

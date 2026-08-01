@@ -7,7 +7,7 @@ import ButtonStyled from "../../../components/ButtonStyled";
 import { FormInput, InputWrapper, InputSlot, FieldError } from "../../../components/FormField";
 import validateForm from "../../../utils/validation";
 import {
-  Page, AuthBox, Logo, Heading, SubText, FieldGroup,
+  Page, AuthBox, Heading, SubText, FieldGroup,
   ErrorAlert, LoadingWrap, LoadingImg, FooterDivider, FooterText,
 } from "./component.styles";
 
@@ -34,7 +34,6 @@ function ForgotPassword() {
   return (
     <Page>
       <AuthBox>
-        <Logo src="/assets/images/logo-ori.png" alt="ProjeX" />
         <Heading>Forgot Password</Heading>
         <SubText>Please enter your email address to receive a reset code.</SubText>
 
@@ -69,7 +68,7 @@ function ForgotPassword() {
         )}
 
         <FooterDivider />
-        <FooterText>© {new Date().getFullYear()} ProjeX. All rights reserved.</FooterText>
+        <FooterText>© {new Date().getFullYear()} demo-dash. All rights reserved.</FooterText>
       </AuthBox>
     </Page>
   );

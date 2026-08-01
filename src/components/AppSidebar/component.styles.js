@@ -51,22 +51,6 @@ export const Backdrop = styled.div`
   }
 `;
 
-export const SidebarHeader = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 30px;
-  width: 100%;
-`;
-
-export const Logo = styled.img`
-  width: 200px;
-  height: auto;
-
-  @media (max-width: 768px) {
-    width: 160px;
-  }
-`;
 
 export const NavList = styled.ul`
   list-style: none;
@@ -143,85 +127,6 @@ export const LogoutBtn = styled.button`
     font-size: 18px;
     margin-right: 10px;
     flex-shrink: 0;
-  }
-`;
-
-export const ParentNavBtn = styled.button`
-  display: flex;
-  align-items: center;
-  color: ${({ $active }) => ($active ? colors.sidebarTextActive : colors.sidebarText)};
-  background: ${({ $active }) => ($active ? colors.sidebarActiveBg : "transparent")};
-  border-left: 3px solid ${({ $active }) => ($active ? colors.accentBlue : "transparent")};
-  border-top: none;
-  border-right: none;
-  border-bottom: none;
-  font-size: ${fontSize.general};
-  padding: 8px 12px 8px 9px;
-  border-radius: 4px;
-  transition: all 0.2s ease-in-out;
-  width: 100%;
-  cursor: pointer;
-  font-family: inherit;
-  text-align: left;
-
-  &:hover {
-    background-color: ${({ $active }) => ($active ? "" : colors.sidebarHoverBg)};
-    color: ${colors.sidebarTextActive};
-  }
-
-  svg:first-child {
-    margin-right: 10px;
-    flex-shrink: 0;
-  }
-
-  @media (max-width: 768px) {
-    padding: 10px 12px 10px 9px;
-    font-size: ${fontSize.general};
-  }
-`;
-
-export const ChevronIcon = styled.span`
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  transition: transform 0.25s ease;
-  transform: ${({ $open }) => ($open ? "rotate(180deg)" : "rotate(0deg)")};
-`;
-
-export const SubMenuList = styled.ul`
-  list-style: none;
-  padding: 2px 0 2px 16px;
-  margin: 0;
-  overflow: hidden;
-  max-height: ${({ $open }) => ($open ? "240px" : "0")};
-  transition: max-height 0.25s ease;
-`;
-
-export const SubMenuAnchor = styled.a`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: ${({ $active }) => ($active ? colors.sidebarTextActive : colors.sidebarText)};
-  background: ${({ $active }) => ($active ? colors.sidebarActiveBg : "transparent")};
-  text-decoration: none;
-  font-size: ${fontSize.general};
-  padding: 6px 12px;
-  border-radius: 4px;
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    background-color: ${({ $active }) => ($active ? "" : colors.sidebarHoverBg)};
-    color: ${colors.sidebarTextActive};
-    text-decoration: none;
-  }
-
-  svg {
-    flex-shrink: 0;
-  }
-
-  @media (max-width: 768px) {
-    padding: 10px 12px;
-    font-size: ${fontSize.general};
   }
 `;
 

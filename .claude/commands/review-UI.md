@@ -1,6 +1,6 @@
 # /review-UI
 
-Review existing ProjeX UI — already built pages, components, or modals — using the `projex-ui-reviewer` agent, with the same severity-gated review-fix cycle used by `/generate-UI` and `/update-UI`. Unlike those two commands, this one doesn't build anything first; it reviews what's already there and only invokes the builder if you choose to fix what's found.
+Review existing demo-dash UI — already built pages, components, or modals — using the `demo-dash-ui-reviewer` agent, with the same severity-gated review-fix cycle used by `/generate-UI` and `/update-UI`. Unlike those two commands, this one doesn't build anything first; it reviews what's already there and only invokes the builder if you choose to fix what's found.
 
 **Usage:**
 
@@ -24,7 +24,7 @@ A short structured form also works if you prefer it (`<type> <Name>`, e.g. `/rev
 
 ---
 
-This command never calls `projex-ui-builder` on its own — it only reviews. The builder is invoked later, in the fix cycle, and only if you approve fixing what was found (or it's minor-only and auto-proceeding, same rule as the other two commands).
+This command never calls `demo-dash-ui-builder` on its own — it only reviews. The builder is invoked later, in the fix cycle, and only if you approve fixing what was found (or it's minor-only and auto-proceeding, same rule as the other two commands).
 
 Given: `$ARGUMENTS`
 
@@ -46,7 +46,7 @@ Only stop and ask if the request genuinely can't be resolved with reasonable con
 
 ## Step 1 — Confirm the target exists
 
-ProjeX does not maintain spec files for already-built pages/components — the original generation source is the Figma reference file plus the `projex-ui-builder` design system rules, not a saved spec document. So for a standalone review, there is normally **no original spec to compare against** unless a focus note from Step 0 effectively supplies one (e.g. "make sure it matches what we agreed for the budget tab" gives the reviewer something concrete to check against).
+demo-dash does not maintain spec files for already-built pages/components — the original generation source is the Figma reference file plus the `demo-dash-ui-builder` design system rules, not a saved spec document. So for a standalone review, there is normally **no original spec to compare against** unless a focus note from Step 0 effectively supplies one (e.g. "make sure it matches what we agreed for the budget tab" gives the reviewer something concrete to check against).
 
 Given that:
 - If a focus note was identified in Step 0 that describes intended behaviour or content (not just "look at mobile" or "check accessibility"), that note **is** the spec for this review's Section 1 (Spec Alignment) check.
@@ -76,7 +76,7 @@ Reuse this same session for every target and every cycle in this run. If login f
 
 ## Step 2 — Review (Cycle 1, per target)
 
-Spawn the `projex-ui-reviewer` subagent (subagent_type: "projex-ui-reviewer") in **FULL REVIEW** mode. Pass it:
+Spawn the `demo-dash-ui-reviewer` subagent (subagent_type: "demo-dash-ui-reviewer") in **FULL REVIEW** mode. Pass it:
 
 - Any focus note identified in Step 0 (this is the only spec source for standalone review — say explicitly if none was given, so the reviewer knows to skip Section 1's comparison rather than guess at intent)
 - If the focus note names a specific breakpoint or device class (mobile, tablet, desktop, "small screens", etc.), tell the reviewer to still run the full standard checklist but give Section 8's visual/responsive check extra scrutiny at that breakpoint specifically — e.g. additional interaction checks (tap targets, menu collapse behaviour, horizontal scroll) at 375px, not just the standard single screenshot. The other breakpoints are still checked, just without the same depth.
@@ -98,7 +98,7 @@ Apply this rule, in order:
 
 1. **If verdict is BLOCKED (re-authentication needed)** — do not attempt to fix anything or continue this target's loop. Tell the user the session appears to have expired, and ask whether to re-run Step 1.5 and retry, or stop here.
 
-2. **If verdict is READY TO PUSH** — nothing to fix from `projex-ui-reviewer`. Go to Step 3.5 for this target before moving on.
+2. **If verdict is READY TO PUSH** — nothing to fix from `demo-dash-ui-reviewer`. Go to Step 3.5 for this target before moving on.
 
 3. **If cycle count has reached 3 for this target** — regardless of severity, stop auto-proceeding. Show the report and ask:
 
@@ -120,11 +120,11 @@ Apply this rule, in order:
 
 ## Step 4 — Fix cycle (per target, only if proceeding)
 
-This is the only step where `projex-ui-builder` gets called.
+This is the only step where `demo-dash-ui-builder` gets called.
 
-Use the `projex-ui-builder` agent to fix only the defects listed in the latest reviewer report (by defect ID, location, expected vs actual) for this target. Do not regenerate from scratch and do not touch unrelated code.
+Use the `demo-dash-ui-builder` agent to fix only the defects listed in the latest reviewer report (by defect ID, location, expected vs actual) for this target. Do not regenerate from scratch and do not touch unrelated code.
 
-After the fix, spawn `projex-ui-reviewer` again in **TARGETED RE-REVIEW** mode, passing the defect IDs from the previous cycle and the same route/trigger info used in Step 2.
+After the fix, spawn `demo-dash-ui-reviewer` again in **TARGETED RE-REVIEW** mode, passing the defect IDs from the previous cycle and the same route/trigger info used in Step 2.
 
 Display the new report. Increment cycle count for this target. Return to Step 3.
 
@@ -132,16 +132,16 @@ Display the new report. Increment cycle count for this target. Return to Step 3.
 
 ## Step 3.5 — Accessibility check (per target)
 
-Once `projex-ui-reviewer` reaches READY TO PUSH for a target, spawn the `projex-a11y-check` subagent (subagent_type: "projex-a11y-check") to run a deterministic WCAG 2.1 AA scan:
+Once `demo-dash-ui-reviewer` reaches READY TO PUSH for a target, spawn the `demo-dash-a11y-check` subagent (subagent_type: "demo-dash-a11y-check") to run a deterministic WCAG 2.1 AA scan:
 
 - **component target**: run in COMPONENT mode — pass the component's rendered HTML from a consumer route.
 - **page or modal target**: run in PAGE mode — pass the same route (and, for a modal, the trigger action) used for the reviewer in Step 2, reusing the already-authenticated session.
 
 Display the report in full. If the verdict is `MAJOR VIOLATIONS PRESENT`, stop and ask:
 
-> Accessibility check found major violation(s) for [target] (see above). Move on to the next target / summary anyway, or send this back to `projex-ui-builder` for a fix cycle first?
+> Accessibility check found major violation(s) for [target] (see above). Move on to the next target / summary anyway, or send this back to `demo-dash-ui-builder` for a fix cycle first?
 
-If the user asks for a fix, use `projex-ui-builder` to address the listed violations only, then re-run `projex-a11y-check` once (same 3-cycle cap as the UI review loop for this target, not a separate budget). Otherwise, or once violations are resolved/minor-only, move to the next target in the queue (if sweep), or go to Step 5.
+If the user asks for a fix, use `demo-dash-ui-builder` to address the listed violations only, then re-run `demo-dash-a11y-check` once (same 3-cycle cap as the UI review loop for this target, not a separate budget). Otherwise, or once violations are resolved/minor-only, move to the next target in the queue (if sweep), or go to Step 5.
 
 ---
 

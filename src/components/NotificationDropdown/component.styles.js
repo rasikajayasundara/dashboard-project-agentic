@@ -222,3 +222,4 @@ export const ViewAllBtn = styled.button`
 
   &:hover { text-decoration: underline; }
 `;
+

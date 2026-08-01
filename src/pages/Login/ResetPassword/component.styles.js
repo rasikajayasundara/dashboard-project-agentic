@@ -26,13 +26,6 @@ export const AuthBox = styled.div`
   animation: ${fadeInUp} 0.5s ease-out both;
 `;
 
-export const Logo = styled.img`
-  width: 180px;
-  height: auto;
-  align-self: center;
-  margin-bottom: 28px;
-`;
-
 export const Heading = styled.h2`
   font-size: 1.4rem;
   font-weight: 300;

@@ -66,12 +66,6 @@ const useInitialNavigation = (props) => {
 
 const routePermissionMap = [
   { path: "/projects", key: "canProjectReadAll" },
-  { path: "/project/:id", key: "canProjectRead" },
-  { path: "/employees", key: "canEmployeeRead" },
-  { path: "/employee/:id", key: "canEmployeeRead" },
-  { path: "/clients", key: "canClientRead" },
-  { path: "/client/:id", key: "canClientRead" },
-  { path: "/timesheet-approvals", key: "canTimesheetReview" },
 ];
 
 const PermissionGuard = () => {

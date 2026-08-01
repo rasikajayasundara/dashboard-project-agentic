@@ -8,7 +8,7 @@ import { SNACKBAR_TYPES, snackbarAction } from "../../../store/snackbarSlice";
 import ButtonStyled from "../../../components/ButtonStyled";
 import { FormInput, InputWrapper, InputSlot, FieldError } from "../../../components/FormField";
 import {
-  Page, AuthBox, Logo, Heading, SubText, FieldGroup, FieldLabel,
+  Page, AuthBox, Heading, SubText, FieldGroup, FieldLabel,
   LoadingWrap, LoadingImg, FooterDivider, FooterText,
   FormSection, ValidatingText,
 } from "./component.styles";
@@ -62,8 +62,7 @@ function SetPassword() {
   return (
     <Page>
       <AuthBox>
-        <Logo src="/assets/images/logo-ori.png" alt="ProjeX" />
-        <Heading>Welcome to ProjeX</Heading>
+        <Heading>Welcome to demo-dash</Heading>
 
         {validateData?.success && (
           <FormSection>
@@ -124,7 +123,7 @@ function SetPassword() {
         )}
 
         <FooterDivider />
-        <FooterText>© {new Date().getFullYear()} ProjeX. All rights reserved.</FooterText>
+        <FooterText>© {new Date().getFullYear()} demo-dash. All rights reserved.</FooterText>
       </AuthBox>
     </Page>
   );

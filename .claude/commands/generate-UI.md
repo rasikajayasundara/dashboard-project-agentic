@@ -1,6 +1,6 @@
 # /generate-UI
 
-Generate new ProjeX UI — a page, a shared component, a modal, or another UI unit — using the `projex-ui-builder` agent, followed by an automated review-and-fix cycle with live Playwright checks.
+Generate new demo-dash UI — a page, a shared component, a modal, or another UI unit — using the `demo-dash-ui-builder` agent, followed by an automated review-and-fix cycle with live Playwright checks.
 
 **Usage:**
 ```
@@ -22,7 +22,7 @@ Generate new ProjeX UI — a page, a shared component, a modal, or another UI un
 
 ---
 
-Use the `projex-ui-builder` agent for all UI generation. It contains the full design system, component patterns, and architecture guidelines — do not duplicate them here.
+Use the `demo-dash-ui-builder` agent for all UI generation. It contains the full design system, component patterns, and architecture guidelines — do not duplicate them here.
 
 Given: `$ARGUMENTS`
 
@@ -83,10 +83,10 @@ State explicitly in the plan: "Interpreting `<type> <Name>` as [your inferred me
 
 ## Step 1.5 — Build a live mockup artifact (required, every type, no exceptions)
 
-Before asking for approval, build and publish a live, interactive HTML mockup of the plan via the `Artifact` tool, following `projex-ui-builder.md` Section 0 exactly:
+Before asking for approval, build and publish a live, interactive HTML mockup of the plan via the `Artifact` tool, following `demo-dash-ui-builder.md` Section 0 exactly:
 
 - Every color, type size, spacing, and radius comes from that agent file's Section 1 (DESIGN SYSTEM) — nothing invented
-- Frame it inside the real ProjeX chrome — sidebar, header, and the actual tab bar/page header of whatever it attaches to — reconstructed from the real components, not imagined
+- Frame it inside the real demo-dash chrome — sidebar, header, and the actual tab bar/page header of whatever it attaches to — reconstructed from the real components, not imagined
 - Bootstrap Icons are unreachable from the Artifact sandbox — hand-draw equivalent thin-stroke inline SVGs, don't substitute emoji
 - If the plan has more than one reasonable direction worth showing, build them into one artifact with a toggle, not separate links
 - Load the `artifact-design` skill first, per the `Artifact` tool's own requirement
@@ -122,9 +122,9 @@ If `TEST_USER_EMAIL` / `TEST_USER_PASSWORD` aren't found in `.env`, stop and ask
 
 ## Step 3 — Build (Cycle 1)
 
-Once approved, use the `projex-ui-builder` agent to generate the files exactly as planned.
+Once approved, use the `demo-dash-ui-builder` agent to generate the files exactly as planned.
 
-After the builder completes, spawn the `projex-ui-reviewer` subagent (subagent_type: "projex-ui-reviewer") in **FULL REVIEW** mode. Pass it:
+After the builder completes, spawn the `demo-dash-ui-reviewer` subagent (subagent_type: "demo-dash-ui-reviewer") in **FULL REVIEW** mode. Pass it:
 
 - The original spec from $ARGUMENTS
 - The file path(s) of everything that was just generated
@@ -169,11 +169,11 @@ Apply this rule, in order:
 
 If proceeding (auto or human-approved):
 
-Use the `projex-ui-builder` agent to fix only the defects listed in the latest reviewer report (by defect ID, location, expected vs actual). Do not regenerate from scratch and do not touch unrelated code.
+Use the `demo-dash-ui-builder` agent to fix only the defects listed in the latest reviewer report (by defect ID, location, expected vs actual). Do not regenerate from scratch and do not touch unrelated code.
 
 Record, for this cycle, the defect IDs sent to the builder and a one-line description of what was actually changed for each (e.g. `defect_2: moved donut chart logic into <DonutChart>`). This running log is required input for the cycle report in Step 7 — keep it updated every cycle, do not reconstruct it from memory at the end.
 
-After the fix, spawn `projex-ui-reviewer` again in **TARGETED RE-REVIEW** mode, passing the defect IDs from the previous cycle and the same route/trigger info used in Step 3. Reuse the existing authenticated session — do not re-run Step 2.5 unless Step 4 sent you back here specifically to re-authenticate.
+After the fix, spawn `demo-dash-ui-reviewer` again in **TARGETED RE-REVIEW** mode, passing the defect IDs from the previous cycle and the same route/trigger info used in Step 3. Reuse the existing authenticated session — do not re-run Step 2.5 unless Step 4 sent you back here specifically to re-authenticate.
 
 Display the new report. Increment cycle count. Return to Step 4.
 
@@ -181,16 +181,16 @@ Display the new report. Increment cycle count. Return to Step 4.
 
 ## Step 5.5 — Accessibility check
 
-Once `projex-ui-reviewer` reaches READY TO PUSH, spawn the `projex-a11y-check` subagent (subagent_type: "projex-a11y-check") to run a deterministic WCAG 2.1 AA scan:
+Once `demo-dash-ui-reviewer` reaches READY TO PUSH, spawn the `demo-dash-a11y-check` subagent (subagent_type: "demo-dash-a11y-check") to run a deterministic WCAG 2.1 AA scan:
 
 - **`component` type**: run in COMPONENT mode — pass the generated component's rendered HTML.
 - **`page` type or `modal` type**: run in PAGE mode — pass the same route (and, for a modal, the trigger action) used for the reviewer in Step 3, since the browser session is already authenticated.
 
 Display the report in full. If the verdict is `MAJOR VIOLATIONS PRESENT`, stop and ask:
 
-> Accessibility check found major violation(s) (see above). Proceed to route check / summary anyway, or send this back to `projex-ui-builder` for a fix cycle first?
+> Accessibility check found major violation(s) (see above). Proceed to route check / summary anyway, or send this back to `demo-dash-ui-builder` for a fix cycle first?
 
-If the user asks for a fix, use `projex-ui-builder` to address the listed violations only, then re-run `projex-a11y-check` once (do not loop indefinitely — this follows the same 3-cycle discipline as the UI review loop, counted against the same cycle total). Otherwise, or once violations are resolved/minor-only, continue to Step 6.
+If the user asks for a fix, use `demo-dash-ui-builder` to address the listed violations only, then re-run `demo-dash-a11y-check` once (do not loop indefinitely — this follows the same 3-cycle discipline as the UI review loop, counted against the same cycle total). Otherwise, or once violations are resolved/minor-only, continue to Step 6.
 
 ---
 

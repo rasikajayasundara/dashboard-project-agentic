@@ -1,6 +1,6 @@
 # API Wiring
 
-Quick-reference for integrating a real API endpoint into ProjeX, replacing mock data. Read this before wiring up any page/tab to the backend.
+Quick-reference for integrating a real API endpoint into demo-dash, replacing mock data. Read this before wiring up any page/tab to the backend.
 
 ---
 

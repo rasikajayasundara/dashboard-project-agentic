@@ -1,6 +1,6 @@
 # /update-UI
 
-Update existing ProjeX UI — a page, a shared component, a modal, or another UI unit — using the `projex-ui-builder` agent, followed by an automated review-and-fix cycle with live Playwright checks.
+Update existing demo-dash UI — a page, a shared component, a modal, or another UI unit — using the `demo-dash-ui-builder` agent, followed by an automated review-and-fix cycle with live Playwright checks.
 
 **Usage:**
 ```
@@ -22,7 +22,7 @@ Update existing ProjeX UI — a page, a shared component, a modal, or another UI
 
 ---
 
-Use the `projex-ui-builder` agent for all UI changes. It contains the full design system, component patterns, and architecture guidelines — do not duplicate them here.
+Use the `demo-dash-ui-builder` agent for all UI changes. It contains the full design system, component patterns, and architecture guidelines — do not duplicate them here.
 
 Given: `$ARGUMENTS`
 
@@ -86,11 +86,11 @@ State explicitly in the plan: "Interpreting `<type> <Name>` as [your inferred me
 
 ## Step 1.5 — Build a live mockup artifact (required, every type, no exceptions)
 
-Before asking for approval, build and publish a live, interactive HTML mockup of the change via the `Artifact` tool, following `projex-ui-builder.md` Section 0 exactly:
+Before asking for approval, build and publish a live, interactive HTML mockup of the change via the `Artifact` tool, following `demo-dash-ui-builder.md` Section 0 exactly:
 
 - Ground it in the **actual current file(s)** read in Step 1 — rebuild the real current layout faithfully first, then apply the planned change on top of that accurate baseline. This is a before/after comparison, not a reinterpretation from scratch
-- Every color, type size, spacing, and radius comes from `projex-ui-builder.md` Section 1 (DESIGN SYSTEM) — nothing invented
-- Frame it inside the real ProjeX chrome — sidebar, header, the actual tab bar/page header — reconstructed from the real components
+- Every color, type size, spacing, and radius comes from `demo-dash-ui-builder.md` Section 1 (DESIGN SYSTEM) — nothing invented
+- Frame it inside the real demo-dash chrome — sidebar, header, the actual tab bar/page header — reconstructed from the real components
 - Bootstrap Icons are unreachable from the Artifact sandbox — hand-draw equivalent thin-stroke inline SVGs, don't substitute emoji
 - If there's more than one reasonable way to make the change, build them into one artifact with a toggle, not separate links
 - Load the `artifact-design` skill first, per the `Artifact` tool's own requirement
@@ -126,9 +126,9 @@ If `TEST_USER_EMAIL` / `TEST_USER_PASSWORD` aren't found in `.env`, stop and ask
 
 ## Step 3 — Apply changes (Cycle 1)
 
-Once approved, use the `projex-ui-builder` agent to apply only the changes described in the plan. Do not refactor or touch anything outside the agreed scope. If the change is breaking (component type), update all affected consumers in the same step — do not leave any consumer in a broken state.
+Once approved, use the `demo-dash-ui-builder` agent to apply only the changes described in the plan. Do not refactor or touch anything outside the agreed scope. If the change is breaking (component type), update all affected consumers in the same step — do not leave any consumer in a broken state.
 
-After the change, spawn the `projex-ui-reviewer` subagent (subagent_type: "projex-ui-reviewer") in **FULL REVIEW** mode. Pass it:
+After the change, spawn the `demo-dash-ui-reviewer` subagent (subagent_type: "demo-dash-ui-reviewer") in **FULL REVIEW** mode. Pass it:
 
 - The original change spec from $ARGUMENTS
 - The file path(s) of everything that was just edited
@@ -173,11 +173,11 @@ Apply this rule, in order:
 
 If proceeding (auto or human-approved):
 
-Use the `projex-ui-builder` agent to fix only the defects listed in the latest reviewer report (by defect ID, location, expected vs actual). Do not redo the whole change and do not touch unrelated code or consumers outside what was already identified as needing updates.
+Use the `demo-dash-ui-builder` agent to fix only the defects listed in the latest reviewer report (by defect ID, location, expected vs actual). Do not redo the whole change and do not touch unrelated code or consumers outside what was already identified as needing updates.
 
 Record, for this cycle, the defect IDs sent to the builder and a one-line description of what was actually changed for each (e.g. `defect_2: moved donut chart logic into <DonutChart>`). This running log is required input for the cycle report in Step 7 — keep it updated every cycle, do not reconstruct it from memory at the end.
 
-After the fix, spawn `projex-ui-reviewer` again in **TARGETED RE-REVIEW** mode, passing the defect IDs from the previous cycle and the same route/trigger info used in Step 3. Reuse the existing authenticated session — do not re-run Step 2.5 unless Step 4 sent you back here specifically to re-authenticate.
+After the fix, spawn `demo-dash-ui-reviewer` again in **TARGETED RE-REVIEW** mode, passing the defect IDs from the previous cycle and the same route/trigger info used in Step 3. Reuse the existing authenticated session — do not re-run Step 2.5 unless Step 4 sent you back here specifically to re-authenticate.
 
 Display the new report. Increment cycle count. Return to Step 4.
 
@@ -185,16 +185,16 @@ Display the new report. Increment cycle count. Return to Step 4.
 
 ## Step 5.5 — Accessibility check
 
-Once `projex-ui-reviewer` reaches READY TO PUSH, spawn the `projex-a11y-check` subagent (subagent_type: "projex-a11y-check") to run a deterministic WCAG 2.1 AA scan:
+Once `demo-dash-ui-reviewer` reaches READY TO PUSH, spawn the `demo-dash-a11y-check` subagent (subagent_type: "demo-dash-a11y-check") to run a deterministic WCAG 2.1 AA scan:
 
 - **`component` type**: run in COMPONENT mode — pass the updated component's rendered HTML.
 - **`page` type or `modal` type**: run in PAGE mode — pass the same route (and, for a modal, the trigger action) used for the reviewer in Step 3, since the browser session is already authenticated.
 
 Display the report in full. If the verdict is `MAJOR VIOLATIONS PRESENT`, stop and ask:
 
-> Accessibility check found major violation(s) (see above). Proceed to verify / summary anyway, or send this back to `projex-ui-builder` for a fix cycle first?
+> Accessibility check found major violation(s) (see above). Proceed to verify / summary anyway, or send this back to `demo-dash-ui-builder` for a fix cycle first?
 
-If the user asks for a fix, use `projex-ui-builder` to address the listed violations only, then re-run `projex-a11y-check` once (do not loop indefinitely — this follows the same 3-cycle discipline as the UI review loop, counted against the same cycle total). Otherwise, or once violations are resolved/minor-only, continue to Step 6.
+If the user asks for a fix, use `demo-dash-ui-builder` to address the listed violations only, then re-run `demo-dash-a11y-check` once (do not loop indefinitely — this follows the same 3-cycle discipline as the UI review loop, counted against the same cycle total). Otherwise, or once violations are resolved/minor-only, continue to Step 6.
 
 ---
 

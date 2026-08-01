@@ -11,11 +11,6 @@ export const fadeInUp = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-export const slideInLeft = keyframes`
-  from { opacity: 0; transform: translateX(-28px); }
-  to   { opacity: 1; transform: translateX(0); }
-`;
-
 // ── Layout ─────────────────────────────────────────────────────────────────────
 
 export const Page = styled.div`
@@ -43,41 +38,6 @@ export const LeftPanel = styled.aside`
   @media (max-width: 991px) {
     display: none;
   }
-`;
-
-// z-index: 1 lifts text above the bubble canvas (z-index: 0)
-export const HeroContent = styled.div`
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 100px;
-`;
-
-export const HeroHeading = styled.h1`
-  font-size: clamp(2.4rem, 4vw, 3.4rem);
-  font-weight: 100;
-  margin: 0;
-  opacity: 0;
-  animation: ${fadeInUp} 1.2s ease-out 0.3s forwards;
-`;
-
-// Subtitle sits at the bottom, absolutely positioned, fades between texts
-export const HeroSubtitle = styled.p`
-  position: absolute;
-  bottom: 26%;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  padding: 0 48px;
-  text-align: center;
-  margin: 0;
-  font-weight: 100;
-  font-size: clamp(1rem, 1.8vw, 1.5rem);
-  color: rgba(255, 255, 255, 0.82);
-  transition: opacity 0.55s ease;
-  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
 `;
 
 export const RightPanel = styled.main`
@@ -112,15 +72,6 @@ export const HeadingCell = styled.div`
   flex-direction: column;
   justify-content: center;
   min-width: 0;
-`;
-
-// Slides in from the same side the heading sits on
-export const LogoImg = styled.img`
-  height: 78px;
-  width: auto;
-  flex-shrink: 0;
-  opacity: 0;
-  animation: ${slideInLeft} 0.55s ease-out 0.25s forwards;
 `;
 
 // Everything under the header — waits for the header's slide-in to finish before loading in

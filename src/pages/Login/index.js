@@ -8,18 +8,11 @@ import ToggleSwitch from "../../components/ToggleSwitch/index.js";
 import { colors } from "../../constants/common";
 import { InputWrapper, InputSlot, FieldError } from "../../components/FormField/index.js";
 import {
-  Page, LeftPanel, HeroContent, HeroHeading, HeroSubtitle, RightPanel, FormBox,
-  LogoImg, HeaderRow, HeadingCell, PageHeading, PageSubHeading, FieldLabel, FloatingInput, FieldGroup,
+  Page, LeftPanel, RightPanel, FormBox,
+  HeaderRow, HeadingCell, PageHeading, PageSubHeading, FieldLabel, FloatingInput, FieldGroup,
   ForgotRow, ForgotLink, RememberRow, LoginButton, ErrorAlert, LoadingWrap, LoadingSpinner,
   FooterDivider, FooterText, BelowContent,
 } from "./component.styles";
-
-const SUBTITLES = [
-  "Manage your work, tasks and timesheets all in one place.",
-  "Track your team's progress in real time.",
-  "Stay on top of deadlines and deliverables.",
-  "One platform for projects, clients and invoices.",
-];
 
 const INITIAL_VALUES = {
   username: "",
@@ -40,9 +33,6 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [subtitleIdx, setSubtitleIdx] = useState(0);
-  const [subtitleVisible, setSubtitleVisible] = useState(true);
-
   const { error: errorMsg, isLoading, isLogInSuccess, user } = useSelector(
     (state) => state.login
   );
@@ -53,18 +43,6 @@ function Login() {
     if (!isLogInSuccess) return;
     navigate(user?.roleId === 1 ? "/dashboard" : "/profile");
   }, [isLogInSuccess, user, navigate]);
-
-  // Rotate subtitle every 4s with a fade-out → swap → fade-in
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSubtitleVisible(false);
-      setTimeout(() => {
-        setSubtitleIdx((i) => (i + 1) % SUBTITLES.length);
-        setSubtitleVisible(true);
-      }, 580);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -77,14 +55,6 @@ function Login() {
       {/* ── Left hero panel ─────────────────────────────────────────────── */}
       <LeftPanel>
         <BackgroundBubbles color="rgba(31, 182, 201, 0.12)" />
-
-        <HeroContent>
-          <HeroHeading>Let's Get Things Done!</HeroHeading>
-        </HeroContent>
-
-        <HeroSubtitle $visible={subtitleVisible}>
-          {SUBTITLES[subtitleIdx]}
-        </HeroSubtitle>
       </LeftPanel>
 
       {/* ── Right form panel ────────────────────────────────────────────── */}
@@ -93,9 +63,8 @@ function Login() {
           <HeaderRow>
             <HeadingCell>
               <PageHeading>Sign In</PageHeading>
-              <PageSubHeading>Access your ProjeX workspace</PageSubHeading>
+              <PageSubHeading>Access your demo-dash workspace</PageSubHeading>
             </HeadingCell>
-            <LogoImg src="/assets/images/logo-ori.png" alt="ProjeX" />
           </HeaderRow>
 
           <BelowContent>
@@ -163,7 +132,7 @@ function Login() {
 
             <FooterDivider />
             <FooterText>
-              © {new Date().getFullYear()} ProjeX. All rights reserved. · Version{" "}
+              © {new Date().getFullYear()} demo-dash. All rights reserved. · Version{" "}
               {process.env.REACT_APP_RELEASE_VERSION}
             </FooterText>
           </BelowContent>

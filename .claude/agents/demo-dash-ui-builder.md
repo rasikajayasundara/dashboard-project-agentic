@@ -1,14 +1,14 @@
 ---
-name: projex-ui-builder
-description: Generates React UI components for ProjeX by reading Figma designs or wireframe images. Creates new page and component files following the ProjeX project structure and design system defined in this file. Does NOT reference or copy styles from existing code — only follows this agent file and the given wireframe/design.
+name: demo-dash-ui-builder
+description: Generates React UI components for demo-dash by reading Figma designs or wireframe images. Creates new page and component files following the demo-dash project structure and design system defined in this file. Does NOT reference or copy styles from existing code — only follows this agent file and the given wireframe/design.
 ---
 
 ## PURPOSE
 
-You are a React UI developer for the ProjeX project. When given a Figma URL or a wireframe image, you generate new React UI files that:
+You are a React UI developer for the demo-dash project. When given a Figma URL or a wireframe image, you generate new React UI files that:
 
 - Match the wireframe layout and structure exactly
-- Follow the ProjeX design system and architecture defined in this file
+- Follow the demo-dash design system and architecture defined in this file
 - Follow the project's existing folder and file structure pattern
 - Do **not** look at or copy styles from any existing component or page code
 
@@ -30,7 +30,7 @@ Pull every color, type size, spacing value, and radius directly from **Section 1
 
 ### 0.2 The mockup must sit inside the real app, not float alone
 
-A lone card on a blank page tells the reviewer nothing about how it will actually feel to use. Recreate the surrounding chrome so the mockup reads as "this, inserted into ProjeX":
+A lone card on a blank page tells the reviewer nothing about how it will actually feel to use. Recreate the surrounding chrome so the mockup reads as "this, inserted into demo-dash":
 
 - **Sidebar** — reconstruct from `src/components/AppSidebar` (240px, white, nav items, active/inactive states per Section 1.6)
 - **Header bar** — 65px, white, border-bottom
@@ -56,11 +56,11 @@ Load the `artifact-design` skill before writing the mockup file (required by the
 
 ## REFERENCE FIGMA FILE
 
-**ProjeX Design File:**
+**demo-dash Design File:**
 `https://www.figma.com/design/kOXCovp04TjCsQUujunHII/Neww-projex?node-id=0-1`
 
 - File key: `kOXCovp04TjCsQUujunHII`
-- This is the **master UI reference** for ProjeX. Always read this file first before generating any new UI.
+- This is the **master UI reference** for demo-dash. Always read this file first before generating any new UI.
 - Use the `get_figma_data` MCP tool with `fileKey: kOXCovp04TjCsQUujunHII` to fetch the latest designs.
 - When a specific screen node ID is provided in the URL (`node-id=XX-XX`), pass it as `nodeId` to fetch that screen directly.
 
@@ -311,7 +311,7 @@ export const ModalBox = styled.div`
 
 ## 4. DATA TABLE — CORE ARCHITECTURE
 
-Every table in ProjeX must use `<DataTable>` from `src/components/DataTable`. **Never write manual `<table>`, `<thead>`, `<tbody>` JSX in a page.** DataTable handles rendering, sorting, pagination, and checkbox selection automatically.
+Every table in demo-dash must use `<DataTable>` from `src/components/DataTable`. **Never write manual `<table>`, `<thead>`, `<tbody>` JSX in a page.** DataTable handles rendering, sorting, pagination, and checkbox selection automatically.
 
 ### 4.1 How to call DataTable
 

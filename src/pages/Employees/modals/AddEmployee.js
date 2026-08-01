@@ -1,181 +1,192 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { colors, fontSize } from "../../../constants/common";
-import useFormValidation from "../../../hooks/useFormValidation";
-import { employeesAction } from "../../../store/employeesSlice";
-import FormField, { FormInput, FormSearchDropdown } from "../../../components/FormField";
-import ToggleSwitch from "../../../components/ToggleSwitch";
+import React, { useState } from "react";
 import {
-  Overlay, ModalBox,
-  ModalHeader, ModalTitle, CloseBtn,
-  ModalFooter, FooterButtons, CancelBtn, SaveBtn,
+  Overlay,
+  ModalBox,
+  ModalHeader,
+  ModalTitle,
+  CloseBtn,
   ModalBody,
-} from "../../../components/ModalShell";
-import { FormGrid } from "./addEmployee.styles";
+  FormGrid,
+  FieldGroup,
+  FieldLabel,
+  RequiredMark,
+  Input,
+  Select,
+  ModalFooter,
+  CancelBtn,
+  SubmitBtn,
+} from "./addEmployee.styles";
 
-const INITIAL_VALUES = {
-  firstName:    "",
-  lastName:     "",
-  email:        "",
-  phone:        "",
-  jobTitleId:   "",
-  location:     "",
-  billable:     1,
+const DEPARTMENT_OPTIONS = ["Engineering", "Design", "Product", "Sales", "Marketing", "Operations"];
+const MANAGER_OPTIONS = ["David Kim", "Lisa Wong", "Michael Brown", "Karen Lee", "Robert Nguyen"];
+const OFFICE_OPTIONS = ["New York", "San Francisco", "London", "Remote"];
+
+const INITIAL_FORM = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  jobTitle: "",
+  department: "",
+  manager: "",
+  office: "",
+  startDate: "",
   billableRate: "",
 };
 
-const RULES = {
-  firstName:    { required: true, label: "First Name"    },
-  lastName:     { required: true, label: "Last Name"     },
-  email:        { required: true, label: "Email", type: "email" },
-  phone:        { required: true, label: "Phone", type: "phone" },
-  jobTitleId:   { required: true, label: "Job Title"     },
-  location:     { required: true, label: "Location"      },
-};
+export default function AddEmployee({ show, onClose }) {
+  const [form, setForm] = useState(INITIAL_FORM);
 
-export default function AddEmployee({ onClose }) {
-  const dispatch = useDispatch();
-  const { officeLocations, jobTitles } = useSelector((state) => state.metadata);
-  const locationOptions = officeLocations.map((l) => ({ value: l.locationId, label: l.officeLocation }));
-  const jobTitleOptions = jobTitles.map((j) => ({ value: j.jobTitleId, label: j.jobTitleName }));
-  const { values, errors, handleChange, validate, reset } = useFormValidation(INITIAL_VALUES, RULES);
-  const [billableRateError, setBillableRateError] = useState("");
-  const isBillable = values.billable === 1;
+  if (!show) return null;
 
-  function handleSubmit() {
-    if (!validate()) return;
-    if (isBillable && !String(values.billableRate || "").trim()) {
-      setBillableRateError("Billable Rate is required");
-      return;
-    }
+  const handleChange = (field) => (e) =>
+    setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
-    const payload = {
-      firstName:  values.firstName,
-      lastName:   values.lastName,
-      email:      values.email,
-      phone:      values.phone,
-      jobTitleId: values.jobTitleId,
-      locationId: values.location,
-      billable:   values.billable,
-    };
-    if (isBillable) payload.billableRate = Number(values.billableRate);
+  const handleClose = () => {
+    setForm(INITIAL_FORM);
+    onClose?.();
+  };
 
-    dispatch(employeesAction.addEmployeeStart(payload));
-    reset();
-    setBillableRateError("");
-    onClose();
-  }
-
-  function handleClose() {
-    reset();
-    setBillableRateError("");
-    onClose();
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: wire to employeesSlice.addEmployeeStart
+    handleClose();
+  };
 
   return (
-    <Overlay onClick={handleClose}>
-      <ModalBox $maxWidth="560px" onClick={(e) => e.stopPropagation()}>
-
+    <Overlay onClick={(e) => e.target === e.currentTarget && handleClose()}>
+      <ModalBox onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
           <ModalTitle>Add Employee</ModalTitle>
-          <CloseBtn onClick={handleClose}><i className="bi bi-x-lg" /></CloseBtn>
+          <CloseBtn type="button" onClick={handleClose} aria-label="Close">
+            <i className="bi bi-x-lg" />
+          </CloseBtn>
         </ModalHeader>
 
-        <ModalBody>
-          <FormGrid>
-
-            <FormField label="First Name" required error={errors.firstName}>
-              <FormInput
-                type="text"
-                placeholder="First name"
-                value={values.firstName}
-                $error={!!errors.firstName}
-                onChange={(e) => handleChange("firstName", e.target.value)}
-              />
-            </FormField>
-
-            <FormField label="Last Name" required error={errors.lastName}>
-              <FormInput
-                type="text"
-                placeholder="Last name"
-                value={values.lastName}
-                $error={!!errors.lastName}
-                onChange={(e) => handleChange("lastName", e.target.value)}
-              />
-            </FormField>
-
-            <FormField label="Email" required error={errors.email}>
-              <FormInput
-                type="email"
-                placeholder="name@projex.nz"
-                value={values.email}
-                $error={!!errors.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-              />
-            </FormField>
-
-            <FormField label="Phone" required error={errors.phone}>
-              <FormInput
-                type="tel"
-                placeholder="+64 21 000 0000"
-                value={values.phone}
-                $error={!!errors.phone}
-                onChange={(e) => handleChange("phone", e.target.value)}
-              />
-            </FormField>
-
-            <FormField label="Job Title" required error={errors.jobTitleId}>
-              <FormSearchDropdown
-                value={values.jobTitleId}
-                $error={!!errors.jobTitleId}
-                onChange={(val) => handleChange("jobTitleId", val)}
-                placeholder="Select job title"
-                options={jobTitleOptions}
-              />
-            </FormField>
-
-            <FormField label="Location" required error={errors.location}>
-              <FormSearchDropdown
-                value={values.location}
-                $error={!!errors.location}
-                onChange={(val) => handleChange("location", val)}
-                placeholder="Select location"
-                options={locationOptions}
-              />
-            </FormField>
-
-            <ToggleSwitch
-              label="Billable"
-              checked={isBillable}
-              onChange={(checked) => handleChange("billable", checked ? 1 : 0)}
-            />
-
-            {isBillable && (
-              <FormField label="Billable Rate" required error={billableRateError}>
-                <FormInput
-                  type="number"
-                  placeholder="e.g. 150"
-                  value={values.billableRate}
-                  $error={!!billableRateError}
-                  onChange={(e) => {
-                    handleChange("billableRate", e.target.value);
-                    setBillableRateError("");
-                  }}
+        <form onSubmit={handleSubmit}>
+          <ModalBody>
+            <FormGrid>
+              <FieldGroup>
+                <FieldLabel htmlFor="firstName">First Name<RequiredMark>*</RequiredMark></FieldLabel>
+                <Input
+                  id="firstName"
+                  type="text"
+                  placeholder="Jane"
+                  value={form.firstName}
+                  onChange={handleChange("firstName")}
+                  required
                 />
-              </FormField>
-            )}
+              </FieldGroup>
 
-          </FormGrid>
-        </ModalBody>
+              <FieldGroup>
+                <FieldLabel htmlFor="lastName">Last Name<RequiredMark>*</RequiredMark></FieldLabel>
+                <Input
+                  id="lastName"
+                  type="text"
+                  placeholder="Doe"
+                  value={form.lastName}
+                  onChange={handleChange("lastName")}
+                  required
+                />
+              </FieldGroup>
 
-        <ModalFooter>
-          <span style={{ fontSize: fontSize.subtitle, color: colors.textMuted }}>* All fields required</span>
-          <FooterButtons>
-            <CancelBtn onClick={handleClose}>Cancel</CancelBtn>
-            <SaveBtn onClick={handleSubmit}>Add Employee</SaveBtn>
-          </FooterButtons>
-        </ModalFooter>
+              <FieldGroup $span2>
+                <FieldLabel htmlFor="email">Email<RequiredMark>*</RequiredMark></FieldLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="jane.doe@company.com"
+                  value={form.email}
+                  onChange={handleChange("email")}
+                  required
+                />
+              </FieldGroup>
 
+              <FieldGroup $span2>
+                <FieldLabel htmlFor="jobTitle">Job Title<RequiredMark>*</RequiredMark></FieldLabel>
+                <Input
+                  id="jobTitle"
+                  type="text"
+                  placeholder="Senior Software Engineer"
+                  value={form.jobTitle}
+                  onChange={handleChange("jobTitle")}
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="department">Department<RequiredMark>*</RequiredMark></FieldLabel>
+                <Select
+                  id="department"
+                  value={form.department}
+                  onChange={handleChange("department")}
+                  required
+                >
+                  <option value="" disabled>Select department</option>
+                  {DEPARTMENT_OPTIONS.map((d) => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
+                </Select>
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="manager">Manager</FieldLabel>
+                <Select
+                  id="manager"
+                  value={form.manager}
+                  onChange={handleChange("manager")}
+                >
+                  <option value="" disabled>Select manager</option>
+                  {MANAGER_OPTIONS.map((m) => (
+                    <option key={m} value={m}>{m}</option>
+                  ))}
+                </Select>
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="office">Office</FieldLabel>
+                <Select
+                  id="office"
+                  value={form.office}
+                  onChange={handleChange("office")}
+                >
+                  <option value="" disabled>Select office</option>
+                  {OFFICE_OPTIONS.map((o) => (
+                    <option key={o} value={o}>{o}</option>
+                  ))}
+                </Select>
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="startDate">Start Date<RequiredMark>*</RequiredMark></FieldLabel>
+                <Input
+                  id="startDate"
+                  type="date"
+                  value={form.startDate}
+                  onChange={handleChange("startDate")}
+                  required
+                />
+              </FieldGroup>
+
+              <FieldGroup>
+                <FieldLabel htmlFor="billableRate">Billable Rate (%)</FieldLabel>
+                <Input
+                  id="billableRate"
+                  type="number"
+                  min="0"
+                  max="100"
+                  placeholder="75"
+                  value={form.billableRate}
+                  onChange={handleChange("billableRate")}
+                />
+              </FieldGroup>
+            </FormGrid>
+          </ModalBody>
+
+          <ModalFooter>
+            <CancelBtn type="button" onClick={handleClose}>Cancel</CancelBtn>
+            <SubmitBtn type="submit">Add Employee</SubmitBtn>
+          </ModalFooter>
+        </form>
       </ModalBox>
     </Overlay>
   );

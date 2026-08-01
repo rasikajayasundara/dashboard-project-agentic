@@ -1,6 +1,6 @@
 # RBAC / Permission Checks
 
-Quick-reference for gating any UI element (button, menu item, nav link, route, form section) behind a permission. Read this before adding a permission check anywhere in ProjeX.
+Quick-reference for gating any UI element (button, menu item, nav link, route, form section) behind a permission. Read this before adding a permission check anywhere in demo-dash.
 
 ---
 

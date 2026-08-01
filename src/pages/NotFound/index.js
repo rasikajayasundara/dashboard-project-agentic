@@ -28,7 +28,7 @@ export default function NotFoundPage() {
           </ImageSide>
         </Inner>
 
-        <Copyright>© {new Date().getFullYear()} ProjeX. All rights reserved.</Copyright>
+        <Copyright>© {new Date().getFullYear()} demo-dash. All rights reserved.</Copyright>
       </div>
     </Page>
   );

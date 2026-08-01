@@ -44,7 +44,7 @@
             - /url: /settings
         - listitem [ref=f5e86]:
           - button "Logout" [ref=f5e87] [cursor=pointer]
-      - generic [ref=f5e92]: © 2026 ProjeX. All rights reserved. · Version 1.0.0
+      - generic [ref=f5e92]: © 2026 demo-dash. All rights reserved. · Version 1.0.0
     - generic [ref=f5e93]:
       - navigation [ref=f5e95]:
         - generic [ref=f5e96]: Good morning, Super Admin! You have 6 unread notifications.

@@ -1,6 +1,6 @@
 {
-  "short_name": "ProjeX",
-  "name": "ProjeX | Simplify Your Workday",
+  "short_name": "demo-dash",
+  "name": "demo-dash | Simplify Your Workday",
   "icons": [
     {
       "src": "assets/icons/favicon.ico",

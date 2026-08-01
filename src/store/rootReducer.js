@@ -3,19 +3,12 @@ import { combineReducers } from "redux";
 import { snackbarReducer } from "./snackbarSlice";
 import { projectReducer } from "./projectSlice";
 import { employeesReducer } from "./employeesSlice";
-import { projectDetailReducer } from "./projectDetailSlice";
 import { loginReducer } from "./LoginSlice";
 import { authReducer } from "./authSlice";
 import { forgotPasswordReducer } from "./forgotPasswordSlice";
 import { clientReducer } from "./clientSlice";
-import { invoiceDetailReducer } from "./invoiceSlice";
 import { metadataReducer } from "./metadataSlice";
 import { timesheetReducer } from "./timesheetSlice";
-import { timesheetApprovalsReducer } from "./timesheetApprovalsSlice";
-import { projectBudgetReducer } from "./projectBudgetSlice";
-import { projectExpenseReducer } from "./projectExpenseSlice";
-import { projectTaskReducer } from "./projectTaskSlice";
-import { projectTeamReducer } from "./projectTeamSlice";
 import { rolesPermissionsReducer } from "./rolesPermissionsSlice";
 import { changePasswordReducer } from "./changePasswordSlice";
 import { notificationReducer } from "./notificationSlice";
@@ -28,19 +21,12 @@ const appReducer = combineReducers({
   login: loginReducer,
   snackbar: snackbarReducer,
   project: projectReducer,
-  projectDetails: projectDetailReducer,
   employees: employeesReducer,
   clients: clientReducer,
-  invoiceDetail: invoiceDetailReducer,
   metadata: metadataReducer,
   forgotPassword: forgotPasswordReducer,
   changePassword: changePasswordReducer,
   timesheets: timesheetReducer,
-  timesheetApprovals: timesheetApprovalsReducer,
-  projectBudget: projectBudgetReducer,
-  projectExpense: projectExpenseReducer,
-  projectTask: projectTaskReducer,
-  projectTeam: projectTeamReducer,
   rolesPermissions: rolesPermissionsReducer,
   notifications: notificationReducer,
   pushNotifications: pushNotificationReducer,

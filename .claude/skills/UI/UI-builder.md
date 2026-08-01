@@ -1,6 +1,6 @@
 # /ui-guide
 
-Quick-reference for building any new UI in ProjeX. Read this before creating a page, component, or modal.
+Quick-reference for building any new UI in demo-dash. Read this before creating a page, component, or modal.
 
 ---
 

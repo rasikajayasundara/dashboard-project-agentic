@@ -1,15 +1,12 @@
 import styled from "styled-components";
-import { fontSize } from "../../constants/common";
-
-// ── Page shell ────────────────────────────────────────────────────────────────
+import { colors, fontSize } from "../../constants/common";
 
 export const PageWrapper = styled.div`
-  background: #f7f9fb;
+  background: ${colors.backgroundGray};
   min-height: 100%;
   padding: 16px 32px 32px;
+  font-family: "Inter", "Segoe UI", sans-serif;
 `;
-
-// ── Page header ───────────────────────────────────────────────────────────────
 
 export const PageHeader = styled.div`
   display: flex;
@@ -28,26 +25,24 @@ export const TitleRow = styled.div`
 export const Title = styled.h1`
   font-size: 20px;
   font-weight: 600;
-  color: #686868;
+  color: ${colors.textPrimary};
   margin: 0;
   line-height: 28px;
 `;
 
 export const TitleBadge = styled.span`
-  background: #dbeaf7;
-  color: #3796bf;
-  font-size: 12px;
+  background: ${colors.accentBlueLight};
+  color: ${colors.accentBlue};
+  font-size: ${fontSize.subtitle};
   font-weight: 600;
   border-radius: 9999px;
   padding: 2px 10px;
-  line-height: 16px;
 `;
 
 export const Subtitle = styled.p`
   font-size: ${fontSize.general};
-  color: #6b7280;
+  color: ${colors.textSecondary};
   margin: 0;
-  line-height: 20px;
 `;
 
 export const HeaderActions = styled.div`
@@ -56,7 +51,3 @@ export const HeaderActions = styled.div`
   gap: 8px;
   flex-shrink: 0;
 `;
-
-// TabBar   → src/components/TabBar
-// FilterBar → src/components/FilterBar
-// Cell styles → src/components/DataTable

@@ -7,7 +7,7 @@ import { forgotPasswordAction } from "../../../store/forgotPasswordSlice";
 import ButtonStyled from "../../../components/ButtonStyled";
 import { FormInput, InputWrapper, InputSlot, FieldError } from "../../../components/FormField";
 import {
-  Page, AuthBox, Logo, Heading, FieldGroup, FieldLabel,
+  Page, AuthBox, Heading, FieldGroup, FieldLabel,
   LoadingWrap, LoadingImg, FooterDivider, FooterText,
 } from "./component.styles";
 
@@ -44,7 +44,6 @@ function ResetPassword() {
   return (
     <Page>
       <AuthBox>
-        <Logo src="/assets/images/logo-ori.png" alt="ProjeX" />
         <Heading>Change Your Password</Heading>
 
         <form onSubmit={onSubmitPassword}>
@@ -98,7 +97,7 @@ function ResetPassword() {
         )}
 
         <FooterDivider />
-        <FooterText>© {new Date().getFullYear()} ProjeX. All rights reserved.</FooterText>
+        <FooterText>© {new Date().getFullYear()} demo-dash. All rights reserved.</FooterText>
       </AuthBox>
     </Page>
   );

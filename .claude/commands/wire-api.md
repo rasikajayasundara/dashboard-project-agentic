@@ -1,6 +1,6 @@
 # /wire-api
 
-Wire an existing ProjeX UI screen to a live backend endpoint using the Redux Toolkit + Saga pattern.
+Wire an existing demo-dash UI screen to a live backend endpoint using the Redux Toolkit + Saga pattern.
 
 **Usage:**
 ```
@@ -17,7 +17,9 @@ Wire an existing ProjeX UI screen to a live backend endpoint using the Redux Too
 
 ---
 
-Use the `projex-api-wirer` agent for all implementation work. It contains the full Redux + Saga patterns, consistency rules, and architecture guidelines — do not duplicate them here.
+Use the `demo-dash-api-wirer` agent for all implementation work. It contains the full Redux + Saga patterns, consistency rules, and architecture guidelines — do not duplicate them here.
+
+Verification after implementation uses two agents in parallel: `demo-dash-api-reviewer` (code-level correctness) and `demo-dash-api-wiring-tester` (live functional behavior — data rendering, session persistence, pagination, form validation). See Step 7.
 
 Given: `$ARGUMENTS`
 
@@ -38,24 +40,33 @@ Read the relevant existing files:
 - `src/config/apiPath.js` — check for existing path constants that might already cover this endpoint
 - `src/store/rootReducer.js` and `src/store/rootSaga.js` — check what slices are already registered
 
+While reading the consumer, classify the **wiring type** — reused later in Step 7:
+- **TABLE** — the consumer renders a `<DataTable>` / paginated list
+- **FORM** — the consumer submits data via a modal/form (Add/Edit patterns)
+- **DISPLAY** — a simple read-only load with no pagination or submission (most GET-detail wirings)
+
 ---
 
-## Step 2 — Verify the actual API response
+## Step 2 — Verify the API contract against the OpenAPI spec
 
-**Before writing any plan**, make a live authenticated call to confirm the real response shape. Do not rely on the OpenAPI spec or mock data — both are known to diverge from the deployed API.
+**Before writing any plan**, confirm the endpoint's exact contract from the backend's OpenAPI spec. Do not make a live authenticated call to the endpoint at this stage, and do not rely on mock data.
 
-To get an auth token:
-1. Navigate to the dev server (`http://localhost:3000`) — if the session is already logged in it will redirect to dashboard
-2. Capture a network request's Authorization header by navigating to a page that makes API calls (e.g. `/employees/246`) and reading a recent request via `browser_network_requests` + `browser_network_request`
-3. Use the captured Bearer token in a `browser_evaluate` fetch call to hit the real endpoint
+The spec lives at:
+`https://app-projex-api-dev-gvayezd2deh3cphf.newzealandnorth-01.azurewebsites.net/api-docs/openapi.json`
 
-If the dev server is not running or the API is unreachable, stop and tell the user. Do not proceed with plan based on assumed response shape.
+1. `WebFetch` the spec.
+2. Find the path + method entry matching `<endpoint>`. Match tolerantly (trailing slash, `{param}` vs `:param` style) but confirm the exact match before proceeding.
+3. **If the endpoint is not found in the spec, or the spec is unreachable: stop and tell the user.** Do not proceed to planning, and do not fall back to a live call. State exactly what was searched for, and if a near-miss exists (e.g. same resource, different path shape), surface it and ask the user to confirm before continuing.
+4. Once matched, extract and record:
+   - Exact path (cross-check against any existing constant in `apiPath.js` — flag if a differently-shaped constant already exists for what looks like the same resource)
+   - Path parameters and query parameters (names, types, required/optional)
+   - Request body schema for POST/PUT/PATCH — every field: name, type, required/optional, format, enum values, min/max (this feeds Step 3's edge cases and, for FORM wirings, Step 7's validation test case draft)
+   - Response schema — top-level shape, every field name/type, which fields are nullable
+5. Present a short confirmation before moving to Step 3:
 
-Once the live response is confirmed:
-- Record the exact top-level response shape (`{ success, message, data: { ... } }` vs `{ success, message, data: [...] }`)
-- Record every field name and its type (including whether numbers come back as strings like `"15.00"`)
-- Note any fields that are `null` in the response
-- Note any nested structures
+   > **API contract confirmed from OpenAPI spec** — `<METHOD> <path>`. [N] request fields, [M] response fields. [Note any `apiPath.js` naming mismatch found, or "none".]
+
+If a field's schema is ambiguous or self-contradictory (e.g. marked required but also nullable with no clear semantics), note it as an open question in the Step 3 plan rather than guessing.
 
 ---
 
@@ -63,8 +74,8 @@ Once the live response is confirmed:
 
 Produce a plan covering:
 
-### Confirmed API response
-Show the actual response shape captured in Step 2 (abbreviated if large).
+### Confirmed API contract
+Show the request/response schema captured in Step 2 (abbreviated if large).
 
 ### Field mapping table
 Map every mock/hardcoded field the UI currently uses to the real API field name:
@@ -116,8 +127,8 @@ Do not edit any files until the user approves. If changes are requested, revise 
 
 ## Step 5 — Implement
 
-Use the `projex-api-wirer` agent to apply exactly the changes described in the approved plan. Pass it:
-- The confirmed API response shape from Step 2
+Use the `demo-dash-api-wirer` agent to apply exactly the changes described in the approved plan. Pass it:
+- The confirmed API contract from Step 2
 - The field mapping table from Step 3
 - The ordered list of files to change
 - All edge cases identified in the plan
@@ -146,39 +157,60 @@ CI=false npm run build
 
 ---
 
-## Step 7 — API integration review (Cycle 1)
+## Step 7 — Verification (Cycle 1): code review + functional test
 
-Once the build is clean, spawn the `projex-api-reviewer` subagent (subagent_type: "projex-api-reviewer"). Pass it:
+Once the build is clean, run **two independent checks** in parallel.
 
+### 7a — Code-level review
+
+Spawn `demo-dash-api-reviewer` (subagent_type: "demo-dash-api-reviewer"). Pass it:
 - Feature name and endpoint (from `$ARGUMENTS`)
-- The confirmed live API response shape from Step 2
+- The confirmed API contract from Step 2
 - The full list of files changed in Step 5
 - The route and trigger instructions to reach the wired feature in the browser (e.g. "navigate to `/employees/246`, click the Timesheets tab, expand the current week row")
-- The bearer token captured in Step 2, or instruction to capture a fresh one via `browser_network_requests`
+- Note: the OpenAPI cross-check in its Section 1 can be brief since Step 2 already confirmed the contract — its effort should focus on Sections 2–10
 
-Display the reviewer's report in full, exactly as produced.
+### 7b — Functional wiring test
+
+Spawn `demo-dash-api-wiring-tester` (subagent_type: "demo-dash-api-wiring-tester"). Pass it:
+- Feature name and endpoint
+- The confirmed API contract from Step 2
+- The full list of files changed in Step 5
+- The route and trigger instructions
+- The wiring type classified in Step 1 (`TABLE` / `FORM` / `DISPLAY`)
+- Mode: `DRAFT` if wiring type is `FORM`, otherwise `FULL`
+
+**If wiring type is FORM:** this pass returns only a draft test case list. Display it in full and stop:
+
+> Here are the proposed validation test cases for `<FeatureName>`. Approve to run them, or edit the list first?
+
+Wait for explicit approval. Once approved (with or without edits), resume the same agent (send the approved list back to its agent id) in `FULL` mode, and wait for its complete report before continuing.
+
+**If wiring type is TABLE or DISPLAY:** the agent runs its applicable sections directly in this one call and returns a complete report — no extra gate needed.
+
+Display both the 7a and 7b reports in full, exactly as produced.
 
 ---
 
 ## Step 8 — Decide what happens next (after every review cycle)
 
-Apply this rule, in order:
+Combine the defect lists from **both** the 7a report (`defect_N` IDs) and the 7b report (`wtest_N` IDs) for this decision — do not treat them separately.
 
-1. **If verdict is READY TO PUSH** — stop the loop. Go to Step 10.
+1. **If both verdicts are READY TO PUSH** — stop the loop. Go to Step 10.
 
-2. **If cycle count has reached 3** — stop auto-proceeding. Show the report and ask:
+2. **If cycle count has reached 3** — stop auto-proceeding. Show both reports and ask:
 
    > Cycle 3 of 3 complete. Defects remain (see above). Proceed with another fix cycle, or stop here?
 
    Wait for explicit response. If "proceed," continue looping but keep asking after every subsequent cycle.
 
-3. **If any defect is MAJOR** — always stop and ask, regardless of cycle count:
+3. **If any defect from either report is MAJOR** — always stop and ask, regardless of cycle count:
 
    > Cycle [N] — major defect(s) found. Proceed with fixes, or stop here?
 
    Wait for explicit response.
 
-4. **If all defects are MINOR and cycle count ≤ 3** — auto-proceed to Step 9 without asking:
+4. **If all defects across both reports are MINOR and cycle count ≤ 3** — auto-proceed to Step 9 without asking:
 
    > Cycle [N] — minor defects only. Auto-proceeding to fix cycle [N+1].
 
@@ -188,21 +220,20 @@ Apply this rule, in order:
 
 If proceeding (auto or human-approved):
 
-Use the `projex-api-wirer` agent to fix only the defects listed in the reviewer report. Pass it:
-- The defect IDs to fix and their descriptions (location, expected, actual) from the reviewer report
+Use the `demo-dash-api-wirer` agent to fix only the defects listed across both reports. Pass it:
+- The defect IDs to fix and their descriptions (location, expected, actual) from both reports
 - The files to edit (do not pass the full wiring context — only what is needed to fix these specific defects)
-- Instruction: "Fix only defect_N, defect_M. Do not re-implement the full wiring. Do not touch anything outside the defect locations."
+- Instruction: "Fix only [defect_N, defect_M, wtest_K, ...]. Do not re-implement the full wiring. Do not touch anything outside the defect locations."
 
 After the wirer agent completes, re-run `CI=false npm run build` to confirm the build is still clean. If new errors are introduced, fix them inline before continuing.
 
-Then spawn `projex-api-reviewer` again, passing:
-- The defect IDs being re-checked
-- The same route/trigger info used in Step 7
-- Mode note: "targeted re-check of defect_N, defect_M — do not re-run the full 10-section checklist, only re-verify these specific defects plus a quick console + network check"
+Then re-run both checks in targeted mode:
+- Spawn `demo-dash-api-reviewer` again, passing the `defect_N` IDs being re-checked, the same route/trigger info, and mode note: "targeted re-check of defect_N, defect_M — do not re-run the full 10-section checklist, only re-verify these specific defects plus a quick console + network check"
+- Resume `demo-dash-api-wiring-tester` (or spawn fresh in `FULL` mode if the prior instance isn't addressable), passing the `wtest_N` IDs being re-checked plus the same route/trigger info and approved test case list from before, with the same targeted-recheck instruction
 
-Record for each cycle: which defect IDs were sent to the wirer and one line describing what actually changed for each. This log feeds Step 10.
+Record for each cycle: which defect IDs (from either report) were sent to the wirer and one line describing what actually changed for each. This log feeds Step 10.
 
-Display the new reviewer report in full. Increment cycle count. Return to Step 8.
+Display both new reports in full. Increment cycle count. Return to Step 8.
 
 ---
 
@@ -212,8 +243,8 @@ Before the summary, show the cycle log:
 
 ```
 ### Review Cycle Report — [N] cycle(s) total
-Cycle 1 — [X] defect(s) found ([A] major, [B] minor)
-Cycle 2 — fixed defect_1 (description), defect_2 (description) → [resolved] resolved, [remaining] remaining
+Cycle 1 — code review: [X] defect(s) ([A] major, [B] minor) · wiring test: [Y] defect(s) ([C] major, [D] minor)
+Cycle 2 — fixed defect_1 (description), wtest_1 (description) → [resolved] resolved, [remaining] remaining
 ...
 Final verdict: [READY TO PUSH | NEEDS FIXES (...) | stopped by user at cycle N]
 ```
