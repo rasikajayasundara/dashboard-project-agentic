@@ -68,3 +68,51 @@ All env vars are prefixed `REACT_APP_`. Key ones:
 - `REACT_APP_API_BASE_URL_V1` — primary API base (used by authAxios)
 - `REACT_APP_ANALYTICS_BASE_URL` — analytics/dashboard API (separate base URL)
 - `REACT_APP_BACKEND_SOCKET_PORT` — Socket.io server
+
+## Showing agent workflows
+
+When the user asks to see a workflow — "show me the workflow", "show me the api wiring workflow", "show me the specific agent workflow", "how does /generate-UI work" — render the **complete** orchestration as an ASCII arrow/line diagram. Never prose paragraphs, never a numbered list of sentences.
+
+Applies to every workflow command: `/generate-UI`, `/update-UI`, `/review-UI`, `/wire-api`, `/audit-dead-code`.
+
+### Required elements
+
+Every diagram must contain all five, explicitly:
+
+1. **Header line** — `AGENT ORCHESTRATION — <command>` as the first line inside the code fence.
+2. **Every step, numbered and in order** — Step 0, Step 1, Step 1.5, … using the same numbers and order as the command's own `.md` file. Never merge, renumber, or skip steps, even ones that do nothing but parse arguments.
+3. **Every agent named in full, inside a box** — `╔═ agent: demo-dash-ui-builder ═╗`. The literal word `agent:` precedes the name, and the name is the exact `subagent_type` string. Orchestrator-only steps (parsing, planning, build check, route registration, summary) get **no** box and **no** agent name — that contrast is what makes the diagram readable at a glance.
+4. **A labelled FEEDBACK LOOP section** wherever a build→review cycle exists. Draw it as a *closed* loop that visibly returns to the decision step — not as two sequential steps. The loop-back arrow must be drawn and labelled with what increments (`cycle++`), and the decision branches must show every exit condition and which ones stop for a human (⏸).
+5. **Human gates marked `⏸`** — every point the orchestrator stops and waits, listed again in a short legend under the diagram.
+
+### Shape to follow
+
+```
+AGENT ORCHESTRATION — /<command>
+│
+├─ Step 0 ── <orchestrator action, no agent>
+│
+├─ Step N ─→ ╔═ agent: <exact-subagent-name> ═╗
+│                  └─→ <what it returns>
+│
+│   ┌───────────────── FEEDBACK LOOP ─────────────────┐
+│   │                                                  │
+├───┤  build ─→ ╔═ agent: <builder> ═╗                │
+│   │              │                                   │
+│   │              ▼                                   │
+│   │  review ─→ ╔═ agent: <reviewer> ═╗               │
+│   │              └─→ severity-tagged report          │
+│   │              │                                   │
+│   │  decide ◄────┘                                   │
+│   │     ├─ READY TO PUSH ────→ exit loop ────────────┼──→ Step N+1
+│   │     ├─ any MAJOR ────────→ ⏸ ask human          │
+│   │     ├─ cycle == 3 ───────→ ⏸ ask human          │
+│   │     └─ MINOR only ───────→ auto-proceed          │
+│   │              │                                   │
+│   │              └──── cycle++ ──── loop back ───────┘
+│   └──────────────────────────────────────────────────┘
+│
+└─ Step Z ── summary ──→ ✋ NO git commands
+```
+
+Close with a one-line agent roster (`**Agents:** …`), the ⏸ gate legend, and — if a run of that workflow just happened in this session — one line on what actually occurred, including any step run out of order.
