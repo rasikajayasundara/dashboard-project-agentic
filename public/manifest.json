@@ -1,0 +1,15 @@
+{
+  "short_name": "ProjeX",
+  "name": "ProjeX | Simplify Your Workday",
+  "icons": [
+    {
+      "src": "assets/icons/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#3796BF",
+  "background_color": "#ffffff"
+}

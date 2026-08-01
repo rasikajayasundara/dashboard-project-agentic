@@ -1,0 +1,70 @@
+{
+  "employees": [
+    { "action": "employee:add", "action_code": "EMP01" },
+    { "action": "employee:update", "action_code": "EMP02" },
+    { "action": "employee:read", "action_code": "EMP03" },
+    { "action": "employee:delete", "action_code": "EMP04" }
+  ],
+
+  "projects": [
+    { "action": "project:add", "action_code": "PRO01" },
+    { "action": "project:read", "action_code": "PRO02" },
+    { "action": "project:update", "action_code": "PRO03" },
+    { "action": "project:delete", "action_code": "PRO04" },
+    { "action": "project:readAll", "action_code": "PRO06" }
+  ],
+
+  "storage": [{ "action": "storage:upload", "action_code": "SRG01" }],
+
+  "budgets": [
+    { "action": "budget:add", "action_code": "BDT01" },
+    { "action": "budget:edit", "action_code": "BDT02" },
+    { "action": "budget:delete", "action_code": "BDT03" },
+    { "action": "budget:read", "action_code": "BDT04" }
+  ],
+
+  "expenses": [
+    { "action": "expenses:add", "action_code": "EXP01" },
+    { "action": "expenses:update", "action_code": "EXP02" },
+    { "action": "expenses:read", "action_code": "EXP03" },
+    { "action": "expenses:delete", "action_code": "EXP04" }
+  ],
+
+  "tasks": [
+    { "action": "task:add", "action_code": "TSK01" },
+    { "action": "task:update", "action_code": "TSK02" },
+    { "action": "task:delete", "action_code": "TSK03" },
+    { "action": "task:read", "action_code": "TSK04" }
+  ],
+
+  "taskAssignments": [
+    { "action": "taskAss:add", "action_code": "TSKA01" },
+    { "action": "taskAss:update", "action_code": "TKSA02" },
+    { "action": "taskAss:read", "action_code": "TKSA03" },
+    { "action": "taskAss:delete", "action_code": "TKSA04" }
+  ],
+
+  "timesheets": [
+    { "action": "timesheet:read", "action_code": "TSH01" },
+    { "action": "timesheet:review", "action_code": "TSH02" }
+  ],
+
+  "invoices": [
+    { "action": "invoice:add", "action_code": "INV01" },
+    { "action": "invoice:update", "action_code": "INV02" },
+    { "action": "invoice:read", "action_code": "INV03" },
+    { "action": "invoice:delete", "action_code": "INV04" },
+    { "action": "invoice:approve", "action_code": "INV05" }
+  ],
+
+  "clients": [
+    { "action": "client:add", "action_code": "CLI01" },
+    { "action": "client:read", "action_code": "CLI02" },
+    { "action": "client:update", "action_code": "CLI03" },
+    { "action": "client:delete", "action_code": "CLI04" }
+  ],
+
+  "config": [
+    { "action": "config:manage", "action_code": "CNF001" }
+  ]
+}

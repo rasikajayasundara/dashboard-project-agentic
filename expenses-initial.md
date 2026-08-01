@@ -1,0 +1,185 @@
+- generic [ref=f5e2]:
+  - generic [ref=f5e3]: Development
+  - generic [ref=f5e7]:
+    - complementary [ref=f5e9]:
+      - link [ref=f5e11] [cursor=pointer]:
+        - /url: /
+        - img "Logo" [ref=f5e12]
+      - list [ref=f5e13]:
+        - listitem [ref=f5e14]:
+          - link "Dashboard" [ref=f5e15] [cursor=pointer]:
+            - /url: /dashboard
+        - listitem [ref=f5e20]:
+          - link "Timesheets Review" [ref=f5e21] [cursor=pointer]:
+            - /url: /timesheet-approvals
+        - listitem [ref=f5e27]:
+          - button "My Jobs" [ref=f5e28] [cursor=pointer]
+          - list [ref=f5e36]:
+            - listitem [ref=f5e37]:
+              - link "My Tasks" [ref=f5e38] [cursor=pointer]:
+                - /url: /my-tasks
+            - listitem [ref=f5e43]:
+              - link "My Projects" [ref=f5e44] [cursor=pointer]:
+                - /url: /my-projects
+            - listitem [ref=f5e48]:
+              - link "My Timesheets" [ref=f5e49] [cursor=pointer]:
+                - /url: /my-timesheet
+            - listitem [ref=f5e55]:
+              - link "My Performance" [ref=f5e56] [cursor=pointer]:
+                - /url: /my-performance
+        - listitem [ref=f5e60]:
+          - link "Projects" [ref=f5e61] [cursor=pointer]:
+            - /url: /projects
+        - listitem [ref=f5e65]:
+          - link "Clients" [ref=f5e66] [cursor=pointer]:
+            - /url: /clients
+        - listitem [ref=f5e70]:
+          - link "Employees" [ref=f5e71] [cursor=pointer]:
+            - /url: /employees
+        - listitem [ref=f5e75]:
+          - link "Invoices" [ref=f5e76] [cursor=pointer]:
+            - /url: /invoices
+        - listitem [ref=f5e81]:
+          - link "Settings" [ref=f5e82] [cursor=pointer]:
+            - /url: /settings
+        - listitem [ref=f5e86]:
+          - button "Logout" [ref=f5e87] [cursor=pointer]
+      - generic [ref=f5e92]: © 2026 ProjeX. All rights reserved. · Version 1.0.0
+    - generic [ref=f5e93]:
+      - navigation [ref=f5e95]:
+        - generic [ref=f5e96]: Good morning, Super Admin! You have 6 unread notifications.
+        - generic [ref=f5e97]:
+          - button "6" [ref=f5e100] [cursor=pointer]
+          - button "SU Super Admin User" [ref=f5e106] [cursor=pointer]:
+            - generic [ref=f5e107]: SU
+            - generic [ref=f5e108]: Super Admin User
+      - generic [ref=f5e114]:
+        - generic [ref=f5e115]:
+          - generic [ref=f5e116]:
+            - generic [ref=f5e117]:
+              - generic [ref=f5e118]: Project No.
+              - generic [ref=f5e119]: J000001
+            - generic [ref=f5e120]:
+              - generic [ref=f5e121]:
+                - generic [ref=f5e122]: Hamilton road construction
+                - generic [ref=f5e123]: Active
+              - generic [ref=f5e124]:
+                - generic [ref=f5e125]:
+                  - generic [ref=f5e126]: 
+                  - text: Waikato DHP
+                - generic [ref=f5e127]:
+                  - generic [ref=f5e128]: 
+                  - text: "PM: John PM"
+                - generic [ref=f5e129]:
+                  - generic [ref=f5e130]: 
+                  - text: Hamilton (Head Office)
+                - generic [ref=f5e131]:
+                  - generic [ref=f5e132]: 
+                  - text: 7 Jul 2026 – 31 Jul 2026
+                - generic [ref=f5e133]:
+                  - generic [ref=f5e134]: 
+                  - text: Transport
+                - generic [ref=f5e135]:
+                  - generic [ref=f5e136]: 
+                  - text: Billable
+                - generic [ref=f5e137]:
+                  - generic [ref=f5e138]: 
+                  - text: Fixed Price
+          - generic [ref=f5e140]:
+            - generic [ref=f5e141]:
+              - generic [ref=f5e142]:
+                - generic:
+                  - generic: 5%
+                  - generic: used
+              - generic [ref=f5e146]: Budget used
+            - generic [ref=f5e147]:
+              - generic [ref=f5e148]:
+                - generic:
+                  - generic: 38%
+                  - generic: done
+              - generic [ref=f5e152]: Task completion
+          - button "" [ref=f5e155] [cursor=pointer]
+        - generic [ref=f5e157]:
+          - tab " General" [ref=f5e158] [cursor=pointer]:
+            - generic [ref=f5e159]: 
+            - text: General
+          - tab " Budget" [ref=f5e160] [cursor=pointer]:
+            - generic [ref=f5e161]: 
+            - text: Budget
+          - tab " Tasks" [ref=f5e162] [cursor=pointer]:
+            - generic [ref=f5e163]: 
+            - text: Tasks
+          - tab " Team" [ref=f5e164] [cursor=pointer]:
+            - generic [ref=f5e165]: 
+            - text: Team
+          - tab " Documents" [ref=f5e166] [cursor=pointer]:
+            - generic [ref=f5e167]: 
+            - text: Documents
+          - tab " Expenses" [selected] [ref=f5e168] [cursor=pointer]:
+            - generic [ref=f5e169]: 
+            - text: Expenses
+          - tab " Invoices" [ref=f5e170] [cursor=pointer]:
+            - generic [ref=f5e171]: 
+            - text: Invoices
+        - generic [ref=f5e174]:
+          - generic [ref=f5e175]:
+            - generic [ref=f5e176]:
+              - generic [ref=f5e177]: Expenses
+              - generic [ref=f5e178]: Mileage and out-of-pocket costs logged against this project
+            - button " Add Expense" [ref=f5e179] [cursor=pointer]:
+              - generic [ref=f5e180]: 
+              - text: Add Expense
+          - table [ref=f5e181]:
+            - rowgroup [ref=f5e182]:
+              - row [ref=f5e183]:
+                - columnheader "Title" [ref=f5e184]
+                - columnheader "Type" [ref=f5e185]
+                - columnheader "Mileage" [ref=f5e186]
+                - columnheader "Cost" [ref=f5e187]
+                - columnheader "Attachment" [ref=f5e188]
+                - columnheader [ref=f5e189]
+            - rowgroup [ref=f5e190]:
+              - row [ref=f5e191]:
+                - cell "Site visit — Downtown office Round trip mileage for site inspection at the downtown client office" [ref=f5e192]:
+                  - generic [ref=f5e193]: Site visit — Downtown office
+                  - generic [ref=f5e194]: Round trip mileage for site inspection at the downtown client office
+                - cell "Mileage" [ref=f5e195]
+                - cell "18 km" [ref=f5e197]
+                - cell "$414.00" [ref=f5e198]
+                - cell [ref=f5e199]:
+                  - button "" [ref=f5e200] [cursor=pointer]
+                - cell [ref=f5e202]:
+                  - button "" [ref=f5e204] [cursor=pointer]
+              - row [ref=f5e206]:
+                - cell "Client lunch meeting Lunch with client stakeholders to review phase 2 scope" [ref=f5e207]:
+                  - generic [ref=f5e208]: Client lunch meeting
+                  - generic [ref=f5e209]: Lunch with client stakeholders to review phase 2 scope
+                - cell "Cost" [ref=f5e210]
+                - cell "—" [ref=f5e212]
+                - cell "$86.50" [ref=f5e213]
+                - cell [ref=f5e214]:
+                  - button "" [ref=f5e215] [cursor=pointer]
+                - cell [ref=f5e217]:
+                  - button "" [ref=f5e219] [cursor=pointer]
+              - row [ref=f5e221]:
+                - cell "Airport pickup — consultant Round trip from airport to job site for visiting structural consultant" [ref=f5e222]:
+                  - generic [ref=f5e223]: Airport pickup — consultant
+                  - generic [ref=f5e224]: Round trip from airport to job site for visiting structural consultant
+                - cell "Mileage" [ref=f5e225]
+                - cell "42 km" [ref=f5e227]
+                - cell "$966.00" [ref=f5e228]
+                - cell [ref=f5e229]:
+                  - button "" [disabled] [ref=f5e230]
+                - cell [ref=f5e232]:
+                  - button "" [ref=f5e234] [cursor=pointer]
+              - row [ref=f5e236]:
+                - cell "Printing & signage Banner printing and site signage for the grand opening event" [ref=f5e237]:
+                  - generic [ref=f5e238]: Printing & signage
+                  - generic [ref=f5e239]: Banner printing and site signage for the grand opening event
+                - cell "Cost" [ref=f5e240]
+                - cell "—" [ref=f5e242]
+                - cell "$210.00" [ref=f5e243]
+                - cell [ref=f5e244]:
+                  - button "" [ref=f5e245] [cursor=pointer]
+                - cell [ref=f5e247]:
+                  - button "" [ref=f5e249] [cursor=pointer]
